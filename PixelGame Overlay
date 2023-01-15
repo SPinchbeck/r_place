@@ -1,9 +1,11 @@
-// @name         pixelgame - r/place | Overlay
+// ==UserScript==
+// @name         PixelGame - r/place | Overlay
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  try to take over the canvas!
 // @author       original: oralekin, edit: Nyanderful
 // @match        https://pixelgame-production.up.railway.app/*
+// @match        https://hot-potato.reddit.com/embed*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=pixilart.com/
 // @grant        none
 // ==/UserScript==
@@ -11,15 +13,22 @@
 //scources are [source,Xpos,Ypos]
 let sources = [
     ["https://i.imgur.com/jpKiwCG.png", "20px" , "20px"],
-    ["https://i.imgur.com/fRezxZw.png", "100px" , "100px"],
+    ["https://i.imgur.com/fRezxZw.png", "-20px" , "-20px"],
 ];
 
 var imgMask = "url(https://i.imgur.com/RRC3qXG.png)"
 
 //PixelGame
 window.addEventListener('load', () => {
+    var overlay = document.createElement("div");
+    overlay.style = "position: absolute;";
+    overlay.style["transform"]= "scale(100)";
+    overlay.style["z-index"] = "9001";
+    overlay.id = "preview-overlay";
+    document.getElementById('zoom').appendChild(overlay)
+
     for (var Index = 0; Index < sources.length; Index ++){
-        document.getElementById('canvas-container').appendChild(
+        document.getElementById('preview-overlay').appendChild(
         (function () {
         const i = document.createElement("img");
         const time = Math.floor(Date.now() / 100000);
