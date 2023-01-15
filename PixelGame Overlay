@@ -1,0 +1,41 @@
+// @name         pixelgame - r/place | Overlay
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  try to take over the canvas!
+// @author       original: oralekin, edit: Nyanderful
+// @match        https://pixelgame-production.up.railway.app/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=pixilart.com/
+// @grant        none
+// ==/UserScript==
+
+//scources are [source,Xpos,Ypos]
+let sources = [
+    ["https://i.imgur.com/jpKiwCG.png", "20px" , "20px"],
+    ["https://i.imgur.com/fRezxZw.png", "100px" , "100px"],
+];
+
+var imgMask = "url(https://i.imgur.com/RRC3qXG.png)"
+
+//PixelGame
+window.addEventListener('load', () => {
+    for (var Index = 0; Index < sources.length; Index ++){
+        document.getElementById('canvas-container').appendChild(
+        (function () {
+        const i = document.createElement("img");
+        const time = Math.floor(Date.now() / 100000);
+        // Image Settings
+        i.style = "position: absolute;";
+        i.style["image-rendering"] = "pixelated";
+        // POSITIONING //
+        i.style.left = sources[Index][1]; //X coords
+        i.style.top = sources[Index][2]; //Y coords
+        i.src = sources[Index][0] + "?raw=true?tstamp=" + time;
+        // MASKING //
+        i.style["-webkit-mask-image"] = imgMask; // mask url
+        i.style["-webkit-mask-size"] = "1px"; // mask size (1px obviously)
+        i.style["pointer-events"] = "none";
+        console.log(i);
+        return i;
+        })())
+    }
+}, true);
